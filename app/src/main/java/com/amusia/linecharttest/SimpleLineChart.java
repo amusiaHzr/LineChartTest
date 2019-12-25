@@ -99,26 +99,34 @@ public class SimpleLineChart extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        //初始化一些参数
         init();
+        //将所有的坐标点转成PointF,并放入list
         initPoint();
+        //绘制底部文字
         drawBottomText(canvas);
+        //绘制底部横线
         drawBottomLine(canvas);
+        //绘制折线图背景
         drawBg(canvas);
+        //绘制折线图
         drawBrokenLine(canvas);
+        //绘制折线图上的文字
         drawTopText(canvas);
     }
 
     private void initPoint() {
-        //折线图的高度
+        //折线图的高度 = view的高度 - 上面文字高度 - 下面文字高度
         float brokenLineHeight = mSelfHeight - topTextHeight - bottomHeight;
-        //单位折线图高度
+        //单位折线图高度 = 折线图的高度 / 数据集中最大的值
         float proportionHeight = brokenLineHeight / getMaxData();
-
+        //初始x点坐标 = 水平方向间距 + 每个点的宽度/2
         float circleCenterX = horizontalSpace + proportionWidth / 2;
+        //初始y点坐标 = 0
         float circleCenterY;
-
-
+        //使用之前clear一下，有可能执行多次onDraw
         points.clear();
+        //将点放入到集合
         for (int i = 0; i < mData.length; i++) {
             float currentProportionHeight = mData[i] * proportionHeight;
             circleCenterY = mSelfHeight - bottomHeight - currentProportionHeight;
@@ -133,9 +141,11 @@ public class SimpleLineChart extends View {
      * @param canvas
      */
     private void drawBottomText(Canvas canvas) {
+        //文字初始点x坐标
         float currentTextX = 0;
+        //文字初始点y坐标
         float currentTextY = 0;
-        currentTextX = proportionWidth / 2+horizontalSpace;
+        currentTextX = proportionWidth / 2 + horizontalSpace;
         currentTextY = mSelfHeight - verticalSpace;
         mPaint.setTextSize(DisplayUtils.sp2px(getContext(), 13));
         mPaint.setColor(Color.parseColor("#666666"));
